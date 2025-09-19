@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
-export const Header = () => {
+export const Header: React.FC = () => {
   const { user, logout } = useAuth();
 
   if (!user) return null;

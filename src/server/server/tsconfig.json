@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": ".", // Resolve paths relative to the project root
+    "paths": {
+      "@/*": ["src/*"], // Maps @/ to src/
+      "@server/server/types": ["src/server/server/src/types.ts"] // Specific mapping for types
+    }
+  },
+  "include": ["src/**/*", "server/**/*"],
+  "exclude": ["node_modules"]
+}

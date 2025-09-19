@@ -42,11 +42,9 @@ export const Login = () => {
     }
   };
 
-  const quickLogin = (role: 'student' | 'teacher' | 'admin') => {
+  const quickLogin = (role: 'teacher') => {
     const credentials = {
-      // student: { email: 'student@edu.com', password: 'student123' },
       teacher: { email: 'teacher@edu.com', password: 'teacher123' },
-      // admin: { email: 'admin@edu.com', password: 'admin123' }
     };
     
     setEmail(credentials[role].email);
@@ -130,20 +128,11 @@ export const Login = () => {
                   <span className="w-full border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">Or try demo accounts</span>
+                  <span className="bg-card px-2 text-muted-foreground">Or try demo account</span>
                 </div>
               </div>
               
-              <div className="grid grid-cols-3 gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => quickLogin('student')}
-                  className="text-xs"
-                >
-                  Student
-                </Button>
+              <div className="flex justify-center">
                 <Button
                   type="button"
                   variant="outline"
@@ -153,18 +142,8 @@ export const Login = () => {
                 >
                   Teacher
                 </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => quickLogin('admin')}
-                  className="text-xs"
-                >
-                  Admin
-                </Button>
               </div>
 
-              {/* Sign up / Create account */}
               <div className="text-center text-sm text-muted-foreground">
                 Don’t have an account?
                 <button
@@ -178,7 +157,6 @@ export const Login = () => {
             </div>
           </CardContent>
         </Card>
-        {/* Secondary actions */}
         <div className="grid grid-cols-2 gap-3">
           <Button variant="outline" onClick={() => alert('Sign In with OTP coming soon')}>Sign In with OTP</Button>
           <Button variant="outline" onClick={() => alert('Sign Up flow coming soon')}>Sign Up</Button>

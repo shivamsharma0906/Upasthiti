@@ -43,7 +43,7 @@ const adminRoutes = [
   { name: 'System', path: '/admin/system', icon: Shield },
 ];
 
-export const Sidebar = () => {
+export const Sidebar: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { user } = useAuth();
   const location = useLocation();
