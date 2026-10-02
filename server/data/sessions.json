@@ -1,0 +1,13 @@
+[
+  {
+    "id": "e2e1b632-4022-49c3-8fb2-ebc2d8f48035",
+    "teacherId": "teacher-demo-id",
+    "department": "Mechanical",
+    "subject": "maths",
+    "startTime": "09:50",
+    "endTime": "10:50",
+    "startDate": "2026-07-15",
+    "endDate": "2027-01-15",
+    "createdAt": 1784042318919
+  }
+]

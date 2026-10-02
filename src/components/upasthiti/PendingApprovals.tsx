@@ -15,35 +15,7 @@ interface PendingRequest {
   submittedAt: string;
 }
 
-const mockRequests: PendingRequest[] = [
-  {
-    id: '1',
-    department: 'Computer Science',
-    year: '3rd Year',
-    rollNo: 'CS2021001',
-    studentName: 'Rahul Sharma',
-    requestType: 'Leave Application',
-    submittedAt: '2024-01-15 10:30'
-  },
-  {
-    id: '2',
-    department: 'Electronics',
-    year: '2nd Year',
-    rollNo: 'EC2022045',
-    studentName: 'Priya Patel',
-    requestType: 'Attendance Correction',
-    submittedAt: '2024-01-15 09:15'
-  },
-  {
-    id: '3',
-    department: 'Mechanical',
-    year: '4th Year',
-    rollNo: 'ME2020123',
-    studentName: 'Amit Kumar',
-    requestType: 'Assignment Extension',
-    submittedAt: '2024-01-14 16:45'
-  }
-];
+const mockRequests: PendingRequest[] = [];
 
 export const PendingApprovals = () => {
   const [requests, setRequests] = useState<PendingRequest[]>(mockRequests);

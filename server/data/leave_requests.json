@@ -1,0 +1,15 @@
+[
+  {
+    "id": "68f0669a-3ad3-41f6-a86d-700c30461fbc",
+    "studentId": "student-demo-id",
+    "studentName": "Student Demo",
+    "rollNumber": "13030824051",
+    "startDate": "2026-10-05",
+    "endDate": "2026-10-10",
+    "daysCount": 6,
+    "reason": "leave wanted",
+    "type": "Personal",
+    "status": "Pending",
+    "submittedAt": 1790970603673
+  }
+]

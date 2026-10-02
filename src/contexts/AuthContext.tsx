@@ -1,69 +1,64 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Role, UserRecord } from '@/server/server/src/types';
-import bcrypt from 'bcryptjs'; // For password hashing simulation
 
 // Align with types.ts
 export type UserRole = Role;
 
 // Ensure User interface matches UserRecord without passwordHash
-export interface User extends Omit<UserRecord, 'passwordHash'> {
-  avatar?: string; // Optional if not in UserRecord, adjust based on types.ts
+export interface User extends Omit<UserRecord, 'passwordHash'> {}
+
+export const isStudentProfileComplete = (user: User | null | undefined): boolean => {
+  if (!user || user.role !== 'student') return true;
+  return Boolean(
+    user.rollNumber?.trim() &&
+    user.department?.trim() &&
+    user.program?.trim() &&
+    user.year?.trim() &&
+    user.semester?.trim() &&
+    user.section?.trim() &&
+    user.academicSession?.trim()
+  );
+};
+
+export interface UpdateProfileResult {
+  success: boolean;
+  error?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<boolean>;
-  signup: (name: string, email: string, password: string, role: Role) => Promise<boolean>;
+  signup: (
+    name: string, 
+    email: string, 
+    password: string, 
+    role: Role, 
+    extra?: { personalEmail?: string; phone?: string; avatar?: string }
+  ) => Promise<boolean>;
+  updateProfile: (profileData: Partial<User>) => Promise<UpdateProfileResult>;
   logout: () => void;
   isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock users with hashed passwords (immutable array for demo)
-const initialMockUsers: (UserRecord & { passwordHash: string })[] = [
-  {
-    id: '1',
-    name: 'Alex Johnson',
-    email: 'student@edu.com',
-    passwordHash: bcrypt.hashSync('student123', 10),
-    role: 'student',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-  },
-  {
-    id: '2',
-    name: 'Sarah Wilson',
-    email: 'teacher@edu.com',
-    passwordHash: bcrypt.hashSync('teacher123', 10),
-    role: 'teacher',
-    avatar: 'https://i.pravatar.cc/150?img=2',
-  },
-  {
-    id: '3',
-    name: 'Michael Chen',
-    email: 'admin@edu.com',
-    passwordHash: bcrypt.hashSync('admin123', 10),
-    role: 'admin',
-    avatar: 'https://i.pravatar.cc/150?img=3',
-  },
-];
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000/api';
 
-// Use state to manage mock users, avoiding direct mutation
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [mockUsers, setMockUsers] = useState<(UserRecord & { passwordHash: string })[]>(initialMockUsers);
 
   useEffect(() => {
-    // Check for existing session
     const storedUser = localStorage.getItem('ems_user');
-    if (storedUser) {
+    const token = localStorage.getItem('ems_token');
+    if (storedUser && token) {
       try {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
       } catch (error) {
         console.error('Failed to parse stored user:', error);
-        localStorage.removeItem('ems_user'); // Clear invalid data
+        localStorage.removeItem('ems_user');
+        localStorage.removeItem('ems_token');
       }
     }
     setIsLoading(false);
@@ -72,51 +67,106 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      const foundUser = mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
-      if (foundUser && bcrypt.compareSync(password, foundUser.passwordHash)) {
-        const { passwordHash, ...userWithoutPassword } = foundUser;
-        setUser(userWithoutPassword);
-        localStorage.setItem('ems_user', JSON.stringify(userWithoutPassword));
-        return true;
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.toLowerCase().trim(), password })
+      });
+      if (!res.ok) {
+        return false;
       }
-      return false;
+      const data = await res.json();
+      const { token, user: loggedIn } = data as { token: string; user: User };
+      localStorage.setItem('ems_token', token);
+      localStorage.setItem('ems_user', JSON.stringify(loggedIn));
+      setUser(loggedIn);
+      return true;
     } catch (error) {
-      console.error('Login error:', error.message || error);
+      console.error('Login error:', error);
       return false;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const signup = async (name: string, email: string, password: string, role: Role): Promise<boolean> => {
+  const signup = async (
+    name: string, 
+    email: string, 
+    password: string, 
+    role: Role,
+    extra?: { personalEmail?: string; phone?: string; avatar?: string }
+  ): Promise<boolean> => {
     setIsLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      const existingUser = mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
-      if (existingUser) {
-        console.warn('Signup failed: Email already registered');
+      const res = await fetch(`${API_BASE}/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          name: name.trim(), 
+          email: email.toLowerCase().trim(), 
+          password, 
+          role, 
+          ...extra 
+        })
+      });
+      if (!res.ok) {
         return false;
       }
-
-      const newUser: UserRecord = {
-        id: Date.now().toString(), // Simple ID generation for demo
-        name,
-        email: email.toLowerCase(),
-        passwordHash: bcrypt.hashSync(password, 10),
-        role,
-        avatar: `https://i.pravatar.cc/150?img=${mockUsers.length + 1}`,
-      };
-
-      // Update mockUsers immutably
-      setMockUsers(prevUsers => [...prevUsers, newUser]);
-      const { passwordHash, ...userWithoutPassword } = newUser;
-      setUser(userWithoutPassword);
-      localStorage.setItem('ems_user', JSON.stringify(userWithoutPassword));
+      const data = await res.json();
+      const { token, user: registered } = data as { token: string; user: User };
+      localStorage.setItem('ems_token', token);
+      localStorage.setItem('ems_user', JSON.stringify(registered));
+      setUser(registered);
       return true;
     } catch (error) {
-      console.error('Signup error:', error.message || error);
+      console.error('Signup error:', error);
       return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateProfile = async (profileData: Partial<User>): Promise<UpdateProfileResult> => {
+    setIsLoading(true);
+    try {
+      const token = localStorage.getItem('ems_token');
+      if (!token) {
+        logout();
+        return { success: false, error: 'Session expired. Please log in again.' };
+      }
+
+      const res = await fetch(`${API_BASE}/auth/profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(profileData)
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          logout();
+          return { success: false, error: 'Session expired. Please sign in again.' };
+        }
+        return { 
+          success: false, 
+          error: data?.error || `Failed to update profile (status: ${res.status})` 
+        };
+      }
+
+      const updatedUser = data.user as User;
+      localStorage.setItem('ems_user', JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      return { success: true };
+    } catch (error: any) {
+      console.error('Update profile network error:', error);
+      return { 
+        success: false, 
+        error: error?.message || 'Network error communicating with the authentication service.' 
+      };
     } finally {
       setIsLoading(false);
     }
@@ -125,10 +175,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     setUser(null);
     localStorage.removeItem('ems_user');
+    localStorage.removeItem('ems_token');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, signup, updateProfile, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

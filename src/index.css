@@ -2,124 +2,148 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Education Management System Design System */
+/* ==========================================================================
+   UPASTHITI 2.0 DESIGN SYSTEM
+   Institutional Academic Operations & Attendance Management Platform
+   ========================================================================== */
 
 @layer base {
   :root {
-    /* Core colors - Education focused blue/purple theme */
-    --background: 250 100% 99%;
-    --foreground: 222 47% 11%;
+    /* Canvas & Surfaces — Tinted with subtle cool indigo resonance */
+    --background: 240 20% 98%;          /* #f8f9fd */
+    --surface: 0 0% 100%;               /* #ffffff */
+    --surface-elevated: 0 0% 100%;      /* #ffffff with elevated shadow */
+    --foreground: 245 45% 11%;          /* #0f1026 - High contrast deep indigo text */
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 245 45% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 245 45% 11%;
 
-    /* Primary - Education blue */
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
-    --primary-light: 217 100% 85%;
-    --primary-dark: 217 91% 45%;
+    /* Brand Primary — Exact match to Upasthiti Logo (#2300ff / #1800ad Ultramarine Indigo) */
+    --primary: 248 100% 48%;             /* #2000f5 - Electric Ultramarine from Logo */
+    --primary-foreground: 0 0% 100%;    /* #ffffff - Crisp white */
+    --primary-subtle: 248 100% 97%;     /* #f2f4ff - Soft cool indigo tint */
 
-    /* Secondary - Soft purple for accents */
-    --secondary: 264 83% 93%;
-    --secondary-foreground: 264 69% 15%;
+    /* Secondary */
+    --secondary: 245 30% 96%;
+    --secondary-foreground: 245 45% 11%;
 
-    /* Success - For positive actions */
-    --success: 142 76% 36%;
+    /* Muted Elements & Text */
+    --muted: 245 25% 96%;               /* #f2f3f9 */
+    --muted-foreground: 245 15% 46%;    /* #6a6e88 */
+
+    /* Accent & Hover */
+    --accent: 248 100% 97%;
+    --accent-foreground: 248 100% 45%;
+
+    /* Borders & Inputs */
+    --border: 245 25% 91%;              /* #e2e4f2 */
+    --input: 245 25% 91%;
+    --ring: 248 100% 50%;               /* #2300ff */
+
+    /* Semantic Status Tokens */
+    --success: 152 76% 36%;             /* Emerald */
     --success-foreground: 0 0% 100%;
-    --success-light: 142 76% 90%;
+    --success-subtle: 152 76% 96%;
+    --success-border: 149 60% 80%;
 
-    /* Warning - For alerts */
-    --warning: 38 92% 50%;
+    --warning: 38 92% 44%;              /* Amber */
     --warning-foreground: 0 0% 100%;
-    --warning-light: 38 100% 95%;
+    --warning-subtle: 48 100% 96%;
+    --warning-border: 48 96% 78%;
 
-    /* Muted colors */
-    --muted: 217 32% 96%;
-    --muted-foreground: 215 16% 47%;
+    --danger: 346 84% 53%;              /* Crimson / Rose */
+    --danger-foreground: 0 0% 100%;
+    --danger-subtle: 355 100% 97%;
+    --danger-border: 353 90% 86%;
 
-    /* Accent colors */
-    --accent: 217 32% 96%;
-    --accent-foreground: 222 47% 11%;
+    --info: 248 100% 50%;               /* Electric Blue / Logo Info */
+    --info-foreground: 0 0% 100%;
+    --info-subtle: 248 100% 97%;
+    --info-border: 248 80% 88%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 346 84% 53%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 217 32% 91%;
-    --input: 217 32% 91%;
-    --ring: 217 91% 60%;
-
-    /* Education specific gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(264 83% 70%));
-    --gradient-secondary: linear-gradient(135deg, hsl(217 100% 95%), hsl(264 100% 98%));
-    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 76% 50%));
-    
-    /* Shadows */
-    --shadow-card: 0 1px 3px 0 hsl(217 91% 60% / 0.1), 0 1px 2px -1px hsl(217 91% 60% / 0.1);
-    --shadow-elevated: 0 10px 15px -3px hsl(217 91% 60% / 0.1), 0 4px 6px -4px hsl(217 91% 60% / 0.1);
-    --shadow-glow: 0 0 20px hsl(217 91% 60% / 0.3);
-
-    /* Animations */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-
+    /* Restrained Radii (0.5rem = 8px) */
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar Tokens */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 245 45% 11%;
+    --sidebar-primary: 248 100% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 248 100% 97%;
+    --sidebar-accent-foreground: 248 100% 45%;
+    --sidebar-border: 245 25% 91%;
+    --sidebar-ring: 248 100% 50%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Canvas & Surfaces (Deep Midnight Space Indigo matching #1800ad depths) */
+    --background: 248 45% 6%;           /* #070817 */
+    --surface: 248 40% 9%;              /* #0d0f22 */
+    --surface-elevated: 248 35% 13%;    /* #141733 */
+    --foreground: 240 20% 98%;          /* #f8fafc */
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 248 40% 9%;
+    --card-foreground: 240 20% 98%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 248 40% 9%;
+    --popover-foreground: 240 20% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Brand Primary — Vivid Electric Ultramarine for Dark Mode */
+    --primary: 248 100% 64%;            /* #4f35ff - Luminous logo ultramarine */
+    --primary-foreground: 0 0% 100%;
+    --primary-subtle: 248 70% 14%;      /* #13163a */
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 248 30% 14%;
+    --secondary-foreground: 240 20% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 248 30% 13%;
+    --muted-foreground: 245 20% 65%;    /* #9498bd */
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 248 30% 14%;
+    --accent-foreground: 240 20% 98%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --border: 248 25% 18%;              /* #1c2044 */
+    --input: 248 25% 18%;
+    --ring: 248 100% 64%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    /* Semantic Status Tokens (Dark) */
+    --success: 152 70% 45%;
+    --success-foreground: 0 0% 100%;
+    --success-subtle: 158 60% 11%;
+    --success-border: 158 50% 22%;
+
+    --warning: 38 90% 50%;
+    --warning-foreground: 0 0% 100%;
+    --warning-subtle: 35 60% 11%;
+    --warning-border: 35 50% 22%;
+
+    --danger: 346 84% 58%;
+    --danger-foreground: 0 0% 100%;
+    --danger-subtle: 346 60% 12%;
+    --danger-border: 346 50% 22%;
+
+    --info: 248 100% 64%;
+    --info-foreground: 0 0% 100%;
+    --info-subtle: 248 60% 12%;
+    --info-border: 248 50% 25%;
+
+    --destructive: 346 84% 58%;
+    --destructive-foreground: 0 0% 100%;
+
+    --sidebar-background: 248 45% 8%;   /* #0a0c1f */
+    --sidebar-foreground: 240 20% 98%;
+    --sidebar-primary: 248 100% 64%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 248 30% 13%;
+    --sidebar-accent-foreground: 240 20% 98%;
+    --sidebar-border: 248 25% 16%;
+    --sidebar-ring: 248 100% 64%;
   }
 }
 
@@ -129,6 +153,51 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased selection:bg-primary/20 selection:text-primary;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-tight text-foreground font-semibold;
+  }
+
+  /* Monospaced numeric alignment for metrics & tabular data */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* Institutional Product Cards */
+  .product-card {
+    @apply bg-card text-card-foreground border border-border rounded-lg shadow-subtle transition-all duration-150;
+  }
+
+  .product-card-hover {
+    @apply product-card hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-soft;
+  }
+
+  .product-card-elevated {
+    @apply bg-card text-card-foreground border border-border rounded-xl shadow-soft;
+  }
+
+  /* Status Pill Base */
+  .status-pill {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border;
+  }
+
+  /* Interactive Data Table Row */
+  .data-table-row {
+    @apply border-b border-border/80 transition-colors hover:bg-muted/40;
+  }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

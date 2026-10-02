@@ -19,6 +19,32 @@ import NotFound from "./pages/NotFound";
 import Students from "./pages/teacher/Students";
 import { CreateAccount } from "./pages/CreateAccount";
 
+// 🔥 import your new pages
+import SigninOtp from "./pages/SigninOtp";
+import Signup from "./pages/Signup";
+
+// New student sub-pages
+import { Assignments } from "./pages/student/Assignments";
+import { Attendance } from "./pages/student/Attendance";
+import { Materials } from "./pages/student/Materials";
+import CompleteProfile from "./pages/student/CompleteProfile";
+import { StudentProfile } from "./pages/student/StudentProfile";
+import { Timetable } from "./pages/student/Timetable";
+import { Subjects } from "./pages/student/Subjects";
+import { Performance } from "./pages/student/Performance";
+import { Notifications } from "./pages/student/Notifications";
+import { Announcements } from "./pages/student/Announcements";
+import { LeaveRequests } from "./pages/student/LeaveRequests";
+import { AttendanceCorrection } from "./pages/student/AttendanceCorrection";
+import { Settings as StudentSettings } from "./pages/student/Settings";
+
+// New admin sub-pages
+import { Students as AdminStudents } from "./pages/admin/Students";
+import { Teachers as AdminTeachers } from "./pages/admin/Teachers";
+import { Classes as AdminClasses } from "./pages/admin/Classes";
+import { Timetables as AdminTimetables } from "./pages/admin/Timetables";
+import { System as AdminSystem } from "./pages/admin/System";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -32,6 +58,18 @@ const App = () => (
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
             <Route path="/create-account" element={<CreateAccount />} /> {/* Public route */}
+            <Route path="/signin-otp" element={<SigninOtp />} />
+            <Route path="/signup" element={<CreateAccount />} />
+
+            {/* Student Complete Profile Route */}
+            <Route
+              path="/student/complete-profile"
+              element={
+                <ProtectedRoute roles={["student"]} allowIncompleteProfile>
+                  <CompleteProfile />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Student Routes */}
             <Route
@@ -45,6 +83,18 @@ const App = () => (
               }
             >
               <Route index element={<StudentDashboard />} />
+              <Route path="profile" element={<StudentProfile />} />
+              <Route path="timetable" element={<Timetable />} />
+              <Route path="assignments" element={<Assignments />} />
+              <Route path="attendance" element={<Attendance />} />
+              <Route path="subjects" element={<Subjects />} />
+              <Route path="materials" element={<Materials />} />
+              <Route path="performance" element={<Performance />} />
+              <Route path="notifications" element={<Notifications />} />
+              <Route path="announcements" element={<Announcements />} />
+              <Route path="leave-requests" element={<LeaveRequests />} />
+              <Route path="attendance-correction" element={<AttendanceCorrection />} />
+              <Route path="settings" element={<StudentSettings />} />
             </Route>
 
             {/* Teacher Routes */}
@@ -61,7 +111,6 @@ const App = () => (
               <Route index element={<TeacherDashboard />} />
               <Route path="students" element={<Students />} />
             </Route>
-
             <Route
               path="/teacher/upasthiti"
               element={
@@ -109,6 +158,11 @@ const App = () => (
               }
             >
               <Route index element={<AdminDashboard />} />
+              <Route path="students" element={<AdminStudents />} />
+              <Route path="teachers" element={<AdminTeachers />} />
+              <Route path="classes" element={<AdminClasses />} />
+              <Route path="timetables" element={<AdminTimetables />} />
+              <Route path="system" element={<AdminSystem />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

@@ -8,6 +8,15 @@ export interface UserRecord {
   passwordHash: string;
   role: Role;
   avatar?: string;
+  personalEmail?: string;
+  phone?: string;
+  rollNumber?: string;
+  department?: string;
+  program?: string;
+  year?: string;
+  semester?: string;
+  section?: string;
+  academicSession?: string;
 }
 
 export interface SessionRecord {

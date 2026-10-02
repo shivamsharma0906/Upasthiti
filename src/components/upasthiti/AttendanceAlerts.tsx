@@ -16,41 +16,7 @@ interface AlertStudent {
   contactPhone: string;
 }
 
-const alertStudents: AlertStudent[] = [
-  {
-    id: '1',
-    rollNo: 'EC2022046',
-    name: 'Vikash Yadav',
-    department: 'Electronics',
-    year: '2nd Year',
-    attendancePercentage: 45,
-    lastAttended: '2024-01-10',
-    contactEmail: 'vikash.yadav@college.edu',
-    contactPhone: '+91 98765 43210'
-  },
-  {
-    id: '2',
-    rollNo: 'CS2021045',
-    name: 'Anjali Sharma',
-    department: 'Computer Science',
-    year: '3rd Year',
-    attendancePercentage: 42,
-    lastAttended: '2024-01-08',
-    contactEmail: 'anjali.sharma@college.edu',
-    contactPhone: '+91 87654 32109'
-  },
-  {
-    id: '3',
-    rollNo: 'ME2020089',
-    name: 'Rohit Kumar',
-    department: 'Mechanical',
-    year: '4th Year',
-    attendancePercentage: 38,
-    lastAttended: '2024-01-05',
-    contactEmail: 'rohit.kumar@college.edu',
-    contactPhone: '+91 76543 21098'
-  }
-];
+const alertStudents: AlertStudent[] = [];
 
 export const AttendanceAlerts = () => {
   const handleSendEmail = (student: AlertStudent) => {

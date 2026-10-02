@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LucideIcon } from "lucide-react";
+import React from "react";
+import { LucideIcon, ArrowUpRight, ArrowDownRight, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface StatsCardProps {
@@ -8,61 +8,71 @@ interface StatsCardProps {
   icon: LucideIcon;
   description?: string;
   trend?: number;
-  variant?: 'default' | 'primary' | 'success' | 'warning';
+  trendLabel?: string;
+  statusBadge?: React.ReactNode;
   className?: string;
 }
 
-const variantStyles = {
-  default: "border-border",
-  primary: "border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10",
-  success: "border-success/20 bg-gradient-to-br from-success/5 to-success/10",
-  warning: "border-warning/20 bg-gradient-to-br from-warning/5 to-warning/10"
-};
-
-const iconStyles = {
-  default: "text-muted-foreground",
-  primary: "text-primary",
-  success: "text-success",
-  warning: "text-warning"
-};
-
-export const StatsCard = ({ 
-  title, 
-  value, 
-  icon: Icon, 
-  description, 
-  trend, 
-  variant = 'default',
-  className 
-}: StatsCardProps) => {
+export const StatsCard: React.FC<StatsCardProps> = ({
+  title,
+  value,
+  icon: Icon,
+  description,
+  trend,
+  trendLabel = "vs last month",
+  statusBadge,
+  className
+}) => {
   return (
-    <Card className={cn(
-      "transition-all duration-300 hover:shadow-lg",
-      variantStyles[variant],
-      className
-    )}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
+    <div
+      className={cn(
+        "bg-card text-card-foreground border border-border rounded-lg p-5 shadow-subtle hover:border-border/80 transition-all duration-150 flex flex-col justify-between",
+        className
+      )}
+    >
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           {title}
-        </CardTitle>
-        <Icon className={cn("h-4 w-4", iconStyles[variant])} />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        {description && (
-          <p className="text-xs text-muted-foreground mt-1">
-            {description}
-          </p>
-        )}
-        {trend !== undefined && (
-          <div className={cn(
-            "text-xs mt-1 font-medium",
-            trend > 0 ? "text-success" : trend < 0 ? "text-destructive" : "text-muted-foreground"
-          )}>
-            {trend > 0 ? "+" : ""}{trend}% from last month
-          </div>
-        )}
-      </CardContent>
-    </Card>
+        </span>
+        <div className="h-8 w-8 rounded-md bg-muted/60 dark:bg-muted/40 border border-border/50 flex items-center justify-center text-muted-foreground">
+          <Icon className="h-4 w-4" />
+        </div>
+      </div>
+
+      <div className="mt-3 flex items-baseline justify-between gap-2">
+        <div className="text-2xl font-bold tracking-tight font-heading tabular-nums text-foreground">
+          {value}
+        </div>
+        {statusBadge}
+      </div>
+
+      {(description || trend !== undefined) && (
+        <div className="mt-2.5 pt-2.5 border-t border-border/50 flex items-center justify-between text-xs text-muted-foreground">
+          {description && <span className="truncate">{description}</span>}
+          {trend !== undefined && (
+            <div
+              className={cn(
+                "inline-flex items-center gap-0.5 font-medium shrink-0 ml-auto tabular-nums",
+                trend > 0
+                  ? "text-emerald-600 dark:text-emerald-400"
+                  : trend < 0
+                  ? "text-rose-600 dark:text-rose-400"
+                  : "text-muted-foreground"
+              )}
+            >
+              {trend > 0 ? (
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              ) : trend < 0 ? (
+                <ArrowDownRight className="w-3.5 h-3.5" />
+              ) : (
+                <Minus className="w-3.5 h-3.5" />
+              )}
+              <span>{Math.abs(trend)}%</span>
+              <span className="text-muted-foreground font-normal ml-0.5">{trendLabel}</span>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 };

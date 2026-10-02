@@ -3,70 +3,76 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMemo, useState, useEffect } from "react";
 
-type Student = { name: string; roll: number };
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000/api';
 
-const makeStudents = (prefix: string): Student[] => {
-  const names = [
-    "Shivam","Rahul","Aarav","Vivaan","Aditya","Arjun","Ishaan","Kabir","Rohit","Kunal",
-    "Ananya","Priya","Sneha","Riya","Aditi","Pooja","Neha","Kavya","Meera","Simran",
-    "Manish","Kiran","Harsh","Varun","Nitin","Akash","Sagar","Vivek","Gaurav","Aman",
-    "Sanjana","Nisha","Sonia","Pawan","Rakesh","Naveen","Deepak","Abhishek","Ravi","Sameer",
-    "Santosh","Akhil","Shreya","Anjali","Palak","Ira","Tanya","Zoya","Rehan","Yash"
-  ];
-  return names.map((name, idx) => ({ name: `${name} (${prefix})`, roll: idx + 1 }));
-};
+type Student = { id: string; name: string; email: string; roll: string };
 
-const DEFAULT_BRANCHES: Record<string, Student[]> = {
-  CSE: makeStudents("CSE"),
-  ECE: makeStudents("ECE"),
-  ME: makeStudents("ME"),
-  CE: makeStudents("CE"),
-};
-const STORAGE_KEY = "teacherBranchStudents";
+const BRANCHES = ["CSE", "ECE", "ME", "CE"] as const;
 
 export default function Students() {
-  const [branch, setBranch] = useState<keyof typeof DEFAULT_BRANCHES>("CSE");
+  const [branch, setBranch] = useState<(typeof BRANCHES)[number]>("CSE");
   const [query, setQuery] = useState("");
-  const [data, setData] = useState<Record<string, Student[]>>(DEFAULT_BRANCHES);
+  const [students, setStudents] = useState<Student[]>([]);
   const [newName, setNewName] = useState("");
   const [newRoll, setNewRoll] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setData(JSON.parse(raw));
-    } catch {}
+    let isMounted = true;
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem("ems_token");
+        const res = await fetch(`${API_BASE}/users`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const studentUsers = (data.users || [])
+            .filter((u: any) => u.role === "student")
+            .map((u: any) => ({
+              id: u.id,
+              name: u.name,
+              email: u.email,
+              roll: "Not assigned yet",
+            }));
+          if (isMounted) setStudents(studentUsers);
+        }
+      } catch (err) {
+        console.error("Failed to load real students:", err);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    fetchUsers();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    } catch {}
-  }, [data]);
-
   const list = useMemo(() => {
-    const base = data[branch];
-    if (!query.trim()) return base;
+    if (!query.trim()) return students;
     const q = query.toLowerCase();
-    return base.filter((s) => s.name.toLowerCase().includes(q) || String(s.roll).includes(q));
-  }, [branch, query]);
+    return students.filter((s) => s.name.toLowerCase().includes(q) || s.email.toLowerCase().includes(q) || s.roll.toLowerCase().includes(q));
+  }, [students, query]);
 
   const addStudent = () => {
-    const rollNum = Number(newRoll);
-    if (!newName.trim() || !rollNum) return;
-    setData({
-      ...data,
-      [branch]: [...data[branch], { name: `${newName} (${branch})`, roll: rollNum }],
-    });
+    if (!newName.trim()) return;
+    setStudents((prev) => [
+      ...prev,
+      {
+        id: `local-${Date.now()}`,
+        name: newName,
+        email: "Not assigned yet",
+        roll: newRoll.trim() || "Not assigned yet",
+      },
+    ]);
     setNewName("");
     setNewRoll("");
   };
 
-  const removeStudent = (roll: number) => {
-    setData({
-      ...data,
-      [branch]: data[branch].filter((s) => s.roll !== roll),
-    });
+  const removeStudent = (id: string) => {
+    setStudents((prev) => prev.filter((s) => s.id !== id));
   };
 
   return (
@@ -75,40 +81,48 @@ export default function Students() {
         <h1 className="text-2xl font-bold">Students</h1>
         <div className="flex gap-2">
           <select
-            className="border rounded px-3 py-2 bg-background"
+            className="border rounded px-3 py-2 bg-background text-sm"
             value={branch}
-            onChange={(e) => setBranch(e.target.value as keyof typeof DEFAULT_BRANCHES)}
+            onChange={(e) => setBranch(e.target.value as (typeof BRANCHES)[number])}
           >
-            {Object.keys(DEFAULT_BRANCHES).map((b) => (
+            {BRANCHES.map((b) => (
               <option key={b} value={b}>{b}</option>
             ))}
           </select>
-          <Input placeholder="Search name or roll" value={query} onChange={(e) => setQuery(e.target.value)} />
+          <Input placeholder="Search name or email" value={query} onChange={(e) => setQuery(e.target.value)} />
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>{branch} - 50 Students</CardTitle>
+          <CardTitle>{branch} - {list.length} Enrolled {list.length === 1 ? 'Student' : 'Students'}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex gap-2 mb-4">
             <Input placeholder="Student name" value={newName} onChange={(e) => setNewName(e.target.value)} />
-            <Input placeholder="Roll" value={newRoll} onChange={(e) => setNewRoll(e.target.value)} />
+            <Input placeholder="Roll (optional)" value={newRoll} onChange={(e) => setNewRoll(e.target.value)} />
             <Button onClick={addStudent}>Add</Button>
           </div>
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-            {list.map((s) => (
-              <li key={s.roll} className="border rounded px-3 py-2 text-sm flex items-center justify-between">
-                <span>{s.name}, roll {s.roll}</span>
-                <button className="text-red-500 text-xs" onClick={() => removeStudent(s.roll)}>Remove</button>
-              </li>
-            ))}
-          </ul>
+
+          {list.length === 0 ? (
+            <div className="text-center py-8 text-sm text-muted-foreground">
+              No students enrolled yet.
+            </div>
+          ) : (
+            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+              {list.map((s) => (
+                <li key={s.id} className="border rounded px-3 py-2 text-sm flex items-center justify-between">
+                  <div className="truncate mr-2">
+                    <span className="font-medium text-foreground block truncate">{s.name}</span>
+                    <span className="text-xs text-muted-foreground block truncate font-mono">Roll: {s.roll}</span>
+                  </div>
+                  <button className="text-red-500 text-xs shrink-0 hover:underline" onClick={() => removeStudent(s.id)}>Remove</button>
+                </li>
+              ))}
+            </ul>
+          )}
         </CardContent>
       </Card>
     </div>
   );
 }
-
-

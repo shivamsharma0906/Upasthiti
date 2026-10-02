@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Users, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000/api';
 
 interface Student {
   id: string;
@@ -15,21 +17,46 @@ interface Student {
   attendancePercentage: number;
 }
 
-const mockStudents: Student[] = [
-  { id: '1', rollNo: 'CS2021001', name: 'Rahul Sharma', department: 'Computer Science', year: '3rd', attendancePercentage: 85 },
-  { id: '2', rollNo: 'CS2021002', name: 'Priya Patel', department: 'Computer Science', year: '3rd', attendancePercentage: 92 },
-  { id: '3', rollNo: 'CS2021003', name: 'Amit Kumar', department: 'Computer Science', year: '3rd', attendancePercentage: 78 },
-  { id: '4', rollNo: 'EC2022045', name: 'Sneha Singh', department: 'Electronics', year: '2nd', attendancePercentage: 88 },
-  { id: '5', rollNo: 'EC2022046', name: 'Vikash Yadav', department: 'Electronics', year: '2nd', attendancePercentage: 45 },
-  { id: '6', rollNo: 'ME2020123', name: 'Arjun Reddy', department: 'Mechanical', year: '4th', attendancePercentage: 67 },
-  { id: '7', rollNo: 'ME2020124', name: 'Deepika Sharma', department: 'Mechanical', year: '4th', attendancePercentage: 95 },
-  { id: '8', rollNo: 'CE2021089', name: 'Ravi Kumar', department: 'Civil', year: '3rd', attendancePercentage: 82 },
-];
-
 export const StudentList = () => {
-  const [students] = useState<Student[]>(mockStudents);
+  const [students, setStudents] = useState<Student[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('all');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchRealStudents = async () => {
+      try {
+        const token = localStorage.getItem('ems_token');
+        const res = await fetch(`${API_BASE}/users`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const studentList: Student[] = (data.users || [])
+            .filter((u: any) => u.role === 'student')
+            .map((u: any) => ({
+              id: u.id,
+              rollNo: 'Not assigned yet',
+              name: u.name,
+              department: 'General',
+              year: 'Not assigned yet',
+              attendancePercentage: 0,
+            }));
+          if (isMounted) setStudents(studentList);
+        }
+      } catch (err) {
+        console.error('Failed to fetch students:', err);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    fetchRealStudents();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const departments = ['all', ...Array.from(new Set(students.map(s => s.department)))];
 
@@ -54,19 +81,13 @@ export const StudentList = () => {
     return 'text-destructive';
   };
 
-  const getProgressColor = (percentage: number) => {
-    if (percentage >= 75) return 'bg-success';
-    if (percentage >= 50) return 'bg-warning';
-    return 'bg-destructive';
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
         <Users className="w-6 h-6 text-primary" />
         <h2 className="text-2xl font-bold text-foreground">Student List</h2>
         <Badge variant="secondary" className="ml-2">
-          {filteredStudents.length} students
+          {filteredStudents.length} {filteredStudents.length === 1 ? 'student' : 'students'}
         </Badge>
       </div>
 
@@ -75,7 +96,7 @@ export const StudentList = () => {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Search by name or roll number..."
+            placeholder="Search by name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -154,7 +175,7 @@ export const StudentList = () => {
               <p className="text-muted-foreground">
                 {searchTerm || selectedDepartment !== 'all' 
                   ? 'Try adjusting your search or filter criteria.'
-                  : 'No students available.'}
+                  : 'No registered students in the system.'}
               </p>
             </div>
           </CardContent>

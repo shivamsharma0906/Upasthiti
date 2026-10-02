@@ -18,17 +18,39 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+				heading: ["Plus Jakarta Sans", "Inter", "-apple-system", "sans-serif"],
+				mono: ["JetBrains Mono", "monospace"],
+			},
+			boxShadow: {
+				subtle: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+				soft: '0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07)',
+				elevated: '0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04)',
+				modal: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.05)',
+				'brand-glow': '0 0 25px -3px rgba(35, 0, 255, 0.35)',
+				'brand-soft': '0 4px 14px -1px rgba(35, 0, 255, 0.2)',
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
+				brand: {
+					DEFAULT: '#2300ff',
+					deep: '#1800ad',
+					light: '#4d2eff',
+					subtle: '#eef0ff',
+				},
+				surface: {
+					DEFAULT: 'hsl(var(--surface))',
+					elevated: 'hsl(var(--surface-elevated))',
+				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))',
-					light: 'hsl(var(--primary-light))',
-					dark: 'hsl(var(--primary-dark))'
+					subtle: 'hsl(var(--primary-subtle))',
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -37,12 +59,26 @@ export default {
 				success: {
 					DEFAULT: 'hsl(var(--success))',
 					foreground: 'hsl(var(--success-foreground))',
-					light: 'hsl(var(--success-light))'
+					subtle: 'hsl(var(--success-subtle))',
+					border: 'hsl(var(--success-border))',
 				},
 				warning: {
 					DEFAULT: 'hsl(var(--warning))',
 					foreground: 'hsl(var(--warning-foreground))',
-					light: 'hsl(var(--warning-light))'
+					subtle: 'hsl(var(--warning-subtle))',
+					border: 'hsl(var(--warning-border))',
+				},
+				danger: {
+					DEFAULT: 'hsl(var(--danger))',
+					foreground: 'hsl(var(--danger-foreground))',
+					subtle: 'hsl(var(--danger-subtle))',
+					border: 'hsl(var(--danger-border))',
+				},
+				info: {
+					DEFAULT: 'hsl(var(--info))',
+					foreground: 'hsl(var(--info-foreground))',
+					subtle: 'hsl(var(--info-subtle))',
+					border: 'hsl(var(--info-border))',
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
