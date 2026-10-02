@@ -1,73 +1,344 @@
-# Welcome to your Lovable project
+# Upasthiti 2.0
 
-## Project info
+### Smart College Attendance & Academic Management Platform
 
-**URL**: https://lovable.dev/projects/79be206a-e69f-4723-b157-726e810fa8d7
+Upasthiti 2.0 is a modern college management platform designed to bring **students, faculty, and administrators** together in one centralized academic system.
 
-## How can I edit this code?
+The platform combines attendance management with academic tools such as **QR attendance, timetables, subjects, performance, assignments, course materials, announcements, leave requests, and attendance correction workflows**.
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## 🚀 Getting Started
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/79be206a-e69f-4723-b157-726e810fa8d7) and start prompting.
+### Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+Make sure you have:
 
-**Use your preferred IDE**
+- Node.js
+- npm
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Clone the Repository
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+```bash
+git clone <YOUR_GIT_REPOSITORY_URL>
+cd Upasthiti
+```
 
-Follow these steps:
+### Install Dependencies
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```bash
+npm install
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Start Development Server
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The application will be available at the local development URL shown in the terminal.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## 🛠️ Technology Stack
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Frontend
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
 - React
-- shadcn-ui
+- TypeScript
+- Vite
 - Tailwind CSS
+- shadcn/ui
+- React Router
+- TanStack Query
+- Recharts
+- Framer Motion
+- Lucide Icons
 
-## How can I deploy this project?
+### Backend
 
-Simply open [Lovable](https://lovable.dev/projects/79be206a-e69f-4723-b157-726e810fa8d7) and click on Share -> Publish.
+- Node.js
+- Express
+- TypeScript
+- JWT Authentication
+- bcryptjs
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## 👨‍🎓 Student Features
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- Student registration
+- First-login academic profile completion
+- Student profile
+- Attendance dashboard
+- QR attendance scanning
+- Geolocation-based attendance
+- Weekly timetable
+- Subject management
+- Academic performance
+- Assignments
+- Course materials
+- Announcements
+- Notifications
+- Leave requests
+- Attendance correction
+- Account settings
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+---
+
+## 👨‍🏫 Faculty Features
+
+- Attendance session creation
+- QR generation
+- Student attendance management
+- Class management
+- Subject management
+- Assignment management
+- Course material management
+- Announcements
+- Leave request review
+- Attendance correction review
+- Attendance analytics
+
+---
+
+## 🛡️ Administration
+
+Administrators can manage institutional academic structures including:
+
+- Students
+- Faculty
+- Departments
+- Programs
+- Years
+- Semesters
+- Sections
+- Academic sessions
+- Subjects
+- Timetables
+- Attendance
+- Announcements
+
+---
+
+## 📅 Timetable System
+
+Upasthiti supports different routines for different academic groups.
+
+Each timetable can be associated with:
+
+```text
+Program
+Department
+Year
+Semester
+Section
+Academic Session
+```
+
+This allows different sections and branches to have completely different routines.
+
+Example:
+
+```text
+B.Tech AI & ML
+├── Semester 5
+│   ├── Section A
+│   └── Section B
+│
+B.Tech CSE
+├── Semester 5
+│   ├── Section A
+│   └── Section B
+```
+
+Authorized administrators can create and manage weekly timetables.
+
+Students automatically see the timetable associated with their academic profile.
+
+---
+
+## 📱 Attendance
+
+Attendance is the core system of Upasthiti.
+
+The platform supports:
+
+- QR-based attendance
+- Expiring QR sessions
+- Student authentication
+- Attendance verification
+- Geolocation verification
+- Attendance history
+- Subject-wise attendance
+- Attendance analytics
+- Attendance correction requests
+
+Students can view their attendance and track their attendance status across subjects.
+
+---
+
+## 🔐 Authentication
+
+Upasthiti uses role-based authentication for:
+
+```text
+Student
+Faculty
+Admin
+```
+
+Student registration collects basic account information, while first login requires completion of the student's academic profile.
+
+Required academic information includes:
+
+- University Roll Number
+- Department
+- Program / Course
+- Year
+- Semester
+- Section
+- Academic Session
+
+---
+
+## 🎨 Design
+
+The application uses a modern academic dashboard design focused on:
+
+- Responsive layouts
+- Clear information hierarchy
+- Accessible interfaces
+- Consistent components
+- Loading states
+- Empty states
+- Error handling
+- Role-specific experiences
+
+---
+
+## 📂 Project Structure
+
+```text
+Upasthiti/
+│
+├── src/
+│   ├── components/
+│   ├── pages/
+│   │   ├── student/
+│   │   ├── teacher/
+│   │   └── admin/
+│   ├── contexts/
+│   ├── hooks/
+│   ├── lib/
+│   └── services/
+│
+├── server/
+│   ├── src/
+│   └── data/
+│
+├── public/
+├── scripts/
+├── package.json
+└── README.md
+```
+
+---
+
+## 🧪 Development
+
+Build the project:
+
+```bash
+npm run build
+```
+
+Run type checking if available:
+
+```bash
+npm run typecheck
+```
+
+---
+
+## 🗺️ Roadmap
+
+### Student
+
+- [x] Registration
+- [x] First-login profile completion
+- [x] Student profile
+- [x] Dashboard
+- [x] Attendance
+- [x] QR attendance
+- [x] Timetable
+- [x] Subjects
+- [ ] Performance
+- [ ] Assignments
+- [ ] Course materials
+- [ ] Announcements
+- [ ] Notifications
+- [ ] Leave management
+- [ ] Attendance correction
+- [ ] Settings
+
+### Faculty
+
+- [ ] Faculty dashboard
+- [ ] Class management
+- [ ] Student management
+- [ ] Subject management
+- [ ] Assignment management
+- [ ] Course material management
+- [ ] Announcement management
+- [ ] Leave approval
+- [ ] Attendance correction
+- [ ] Attendance analytics
+
+### Administration
+
+- [ ] Student management
+- [ ] Faculty management
+- [ ] Academic structure management
+- [x] Timetable builder
+- [ ] Institutional analytics
+- [ ] System configuration
+
+### Platform
+
+- [ ] Production database
+- [ ] Advanced authorization
+- [ ] Audit logs
+- [ ] Rate limiting
+- [ ] Offline attendance
+- [ ] Advanced biometric attendance
+- [ ] Production deployment
+
+---
+
+## 🎯 Vision
+
+Upasthiti aims to become a complete **digital academic workspace for colleges**, connecting:
+
+```text
+Students
+    ↓
+Attendance • Timetable • Subjects
+Performance • Assignments • Resources
+    ↓
+Faculty
+    ↓
+Academic Management
+    ↓
+Administration
+```
+
+The goal is to replace disconnected academic workflows with one reliable, structured, and student-focused platform.
+
+---
+
+## 👨‍💻 Upasthiti 2.0
+
+**Smart College Attendance & Academic Management Platform**
+
+Built with **React, TypeScript, Vite, Express, Tailwind CSS, and modern web technologies.**
